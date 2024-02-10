@@ -89,4 +89,60 @@ exports.cancelAttendance = async (req, res) => {
     }
 };
 
-// Other event controller methods (updateEvent, deleteEvent, addComment, getRecommendedEvents) remain unchanged
+// Update Event
+exports.updateEvent = async (req, res) => {
+    try {
+        const eventId = req.params.id;
+        const eventData = req.body;
+        const event = await Event.findByIdAndUpdate(eventId, eventData, { new: true });
+        if (!event) {
+            return res.status(404).json({ message: 'Event not found' });
+        }
+        res.status(200).json({ message: 'Event updated successfully', event });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+// Delete Event
+exports.deleteEvent = async (req, res) => {
+    try {
+        const eventId = req.params.id;
+        const event = await Event.findByIdAndDelete(eventId);
+        if (!event) {
+            return res.status(404).json({ message: 'Event not found' });
+        }
+        res.status(200).json({ message: 'Event deleted successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+// Add Comment to Event
+exports.addComment = async (req, res) => {
+    try {
+        const eventId = req.params.id;
+        const { comment } = req.body;
+        const event = await Event.findByIdAndUpdate(eventId, { $push: { comments: comment } }, { new: true });
+        if (!event) {
+            return res.status(404).json({ message: 'Event not found' });
+        }
+        res.status(200).json({ message: 'Comment added successfully', event });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+// Get Recommended Events for User
+exports.getRecommendedEvents = async (req, res) => {
+    try {
+        // Implementation of get recommended events logic
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
